@@ -11,3 +11,5 @@ It's possible to detects landmarks like: `faceContour`, `leftEye`, `rightEye`, `
 
 To display the results I'm using multiple `CAShapeLayer` with `UIBezierPath`. 
 Landmarks detection is working on live front camera preview.
+
+![Example of detected landmarks](https://www.thedroidsonroids.com/wp-content/uploads/2017/06/IMG_4A14A90AF6C1-1-229x406@2x.jpeg)
