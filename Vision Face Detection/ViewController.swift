@@ -111,47 +111,13 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
 }
 
 extension ViewController {
+    
     func detectFace(on image: CIImage) {
         try? faceDetectionRequest.perform([faceDetection], on: image)
         if let results = faceDetection.results as? [VNFaceObservation] {
             if !results.isEmpty {
                 faceLandmarks.inputFaceObservations = results
-                try? faceLandmarksDetectionRequest.perform([faceLandmarks], on: image)
-                
-                if let landmarksResults = faceLandmarks.results as? [VNFaceObservation] {
-                    for observation in landmarksResults {
-                        DispatchQueue.main.async {
-                            let faceBoundingBox = self.faceLandmarks.inputFaceObservations!.first!.boundingBox.scaled(to: self.view.bounds.size)
-                            
-                            let faceContour = observation.landmarks?.faceContour
-                            self.convertFaceLandmark(faceContour, faceBoundingBox)
-                            
-                            let leftEye = observation.landmarks?.leftEye
-                            self.convertFaceLandmark(leftEye, faceBoundingBox)
-                            
-                            let rightEye = observation.landmarks?.rightEye
-                            self.convertFaceLandmark(rightEye, faceBoundingBox)
-                            
-                            let nose = observation.landmarks?.nose
-                            self.convertFaceLandmark(nose, faceBoundingBox)
-                            
-                            let lips = observation.landmarks?.innerLips
-                            self.convertFaceLandmark(lips, faceBoundingBox)
-                            
-                            let leftEyebrow = observation.landmarks?.leftEyebrow
-                            self.convertFaceLandmark(leftEyebrow, faceBoundingBox)
-                            
-                            let rightEyebrow = observation.landmarks?.rightEyebrow
-                            self.convertFaceLandmark(rightEyebrow, faceBoundingBox)
-                            
-                            let noseCrest = observation.landmarks?.noseCrest
-                            self.convertFaceLandmark(noseCrest, faceBoundingBox)
-                            
-                            let outerLips = observation.landmarks?.outerLips
-                            self.convertFaceLandmark(outerLips, faceBoundingBox)
-                        }
-                    }
-                }
+                detectLandmarks(on: image)
                 
                 DispatchQueue.main.async {
                     self.shapeLayer.sublayers?.removeAll()
@@ -160,27 +126,65 @@ extension ViewController {
         }
     }
     
-    func convertFaceLandmark(_ landmark: VNFaceLandmarkRegion2D?, _ boundingBox: CGRect) {
-        if let points = landmark?.points, let count = landmark?.pointCount {
-            let convertedPoints = convert(points, count)
-            var convertedCGFloatPoints = [(x: CGFloat, y: CGFloat)]()
-            let widthFactor = Float(boundingBox.width)
-            let heightFactor = Float(boundingBox.height)
-            
-            convertedPoints.forEach { point in
-                let pointX = CGFloat(point.x * widthFactor) + boundingBox.origin.x
-                let pointY = CGFloat(point.y * heightFactor) + boundingBox.origin.y
-                
-                convertedCGFloatPoints.append((pointX, pointY))
-            }
-            
-            DispatchQueue.main.async {
-                self.drawSingle(points: convertedCGFloatPoints)
+    func detectLandmarks(on image: CIImage) {
+        try? faceLandmarksDetectionRequest.perform([faceLandmarks], on: image)
+        if let landmarksResults = faceLandmarks.results as? [VNFaceObservation] {
+            for observation in landmarksResults {
+                DispatchQueue.main.async {
+                    if let boundingBox = self.faceLandmarks.inputFaceObservations?.first?.boundingBox {
+                        let faceBoundingBox = boundingBox.scaled(to: self.view.bounds.size)
+                        
+                        //different types of landmarks
+                        let faceContour = observation.landmarks?.faceContour
+                        self.convertPointsForFace(faceContour, faceBoundingBox)
+                        
+                        let leftEye = observation.landmarks?.leftEye
+                        self.convertPointsForFace(leftEye, faceBoundingBox)
+                        
+                        let rightEye = observation.landmarks?.rightEye
+                        self.convertPointsForFace(rightEye, faceBoundingBox)
+                        
+                        let nose = observation.landmarks?.nose
+                        self.convertPointsForFace(nose, faceBoundingBox)
+                        
+                        let lips = observation.landmarks?.innerLips
+                        self.convertPointsForFace(lips, faceBoundingBox)
+                        
+                        let leftEyebrow = observation.landmarks?.leftEyebrow
+                        self.convertPointsForFace(leftEyebrow, faceBoundingBox)
+                        
+                        let rightEyebrow = observation.landmarks?.rightEyebrow
+                        self.convertPointsForFace(rightEyebrow, faceBoundingBox)
+                        
+                        let noseCrest = observation.landmarks?.noseCrest
+                        self.convertPointsForFace(noseCrest, faceBoundingBox)
+                        
+                        let outerLips = observation.landmarks?.outerLips
+                        self.convertPointsForFace(outerLips, faceBoundingBox)
+                    }
+                }
             }
         }
     }
     
-    func drawSingle(points: [(x: CGFloat, y: CGFloat)]) {
+    func convertPointsForFace(_ landmark: VNFaceLandmarkRegion2D?, _ boundingBox: CGRect) {
+        if let points = landmark?.points, let count = landmark?.pointCount {
+            let convertedPoints = convert(points, with: count)
+            
+            let faceLandmarkPoints = convertedPoints.map { (point: (x: CGFloat, y: CGFloat)) -> (x: CGFloat, y: CGFloat) in
+                let pointX = point.x * boundingBox.width + boundingBox.origin.x
+                let pointY = point.y * boundingBox.height + boundingBox.origin.y
+                
+                return (x: pointX, y: pointY)
+            }
+            
+            DispatchQueue.main.async {
+                self.draw(points: faceLandmarkPoints)
+            }
+        }
+    }
+    
+    func draw(points: [(x: CGFloat, y: CGFloat)]) {
         let newLayer = CAShapeLayer()
         newLayer.strokeColor = UIColor.red.cgColor
         newLayer.lineWidth = 2.0
@@ -193,19 +197,18 @@ extension ViewController {
             path.move(to: point)
         }
         path.addLine(to: CGPoint(x: points[0].x, y: points[0].y))
-        
         newLayer.path = path.cgPath
         
         shapeLayer.addSublayer(newLayer)
     }
     
     
-    func convert(_ points: UnsafePointer<vector_float2>, _ count: Int) -> [(x: Float, y: Float)] {
-        var newPoints = [(x: Float, y: Float)]()
+    func convert(_ points: UnsafePointer<vector_float2>, with count: Int) -> [(x: CGFloat, y: CGFloat)] {
+        var convertedPoints = [(x: CGFloat, y: CGFloat)]()
         for i in 0...count {
-            newPoints.append((points[i].x, points[i].y))
+            convertedPoints.append((CGFloat(points[i].x), CGFloat(points[i].y)))
         }
         
-        return newPoints
+        return convertedPoints
     }
 }
