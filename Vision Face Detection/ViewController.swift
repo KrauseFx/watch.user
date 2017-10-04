@@ -10,9 +10,13 @@ import UIKit
 import AVFoundation
 import Vision
 
-final class ViewController: UIViewController {
+final class ViewController: UIViewController, UIScrollViewDelegate {
     var session: AVCaptureSession?
     let shapeLayer = CAShapeLayer()
+    
+    let emojiLabel = UILabel()
+    let distanceView = UIView()
+    let feedView = UIScrollView()
     
     let faceDetection = VNDetectFaceRectanglesRequest()
     let faceLandmarks = VNDetectFaceLandmarksRequest()
@@ -21,10 +25,11 @@ final class ViewController: UIViewController {
     
     lazy var previewLayer: AVCaptureVideoPreviewLayer? = {
         guard let session = self.session else { return nil }
-        
+
         var previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer.videoGravity = .resizeAspectFill
-        
+        previewLayer.isHidden = true;
+
         return previewLayer
     }()
     
@@ -37,18 +42,7 @@ final class ViewController: UIViewController {
         
         sessionPrepare()
         session?.startRunning()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        previewLayer?.frame = view.frame
-        shapeLayer.frame = view.frame
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         guard let previewLayer = previewLayer else { return }
-        
         view.layer.addSublayer(previewLayer)
         
         shapeLayer.strokeColor = UIColor.red.cgColor
@@ -58,6 +52,57 @@ final class ViewController: UIViewController {
         shapeLayer.setAffineTransform(CGAffineTransform(scaleX: -1, y: -1))
         
         view.layer.addSublayer(shapeLayer)
+        
+        let segmented = UISegmentedControl.init(items: ["Feed", "Empty", "Raw"]);
+        segmented.frame = CGRect(x: 10, y: 30.0, width: self.view.frame.width - 20, height: 50); // like an animal
+        segmented.selectedSegmentIndex = 0
+        segmented.addTarget(self, action: #selector(didTapToggle(sender:)), for: UIControlEvents.valueChanged);
+        view.addSubview(segmented);
+        self.didTapToggle(sender: segmented)
+        
+        emojiLabel.frame = CGRect(x: self.view.frame.width / 2.0 - 30.0, y: self.view.frame.height - 90.0, width: 100, height: 100);
+        emojiLabel.text = "🙃"
+        emojiLabel.font = UIFont(name: emojiLabel.font.fontName, size: 60)
+        emojiLabel.sizeToFit()
+        view.addSubview(emojiLabel);
+        
+        distanceView.backgroundColor = UIColor.blue
+        distanceView.alpha = 0.3
+        view.addSubview(distanceView)
+        
+        let image = UIImage.init(named: "SampleFeed")
+        let imageView = UIImageView.init(image: image)
+        feedView.addSubview(imageView)
+        feedView.backgroundColor = UIColor.clear
+        feedView.frame = CGRect(x: 0, y: 100, width: self.view.bounds.width, height: self.view.bounds.height)
+        feedView.contentSize = imageView.bounds.size
+        feedView.delegate = self
+        view.addSubview(feedView)
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        feedView.alpha = 0.7
+    }
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        feedView.alpha = 1
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        previewLayer?.frame = view.frame
+        shapeLayer.frame = view.frame
+    }
+    
+    @objc func didTapToggle(sender: UISegmentedControl) {
+        previewLayer?.isHidden = true
+        self.feedView.isHidden = true
+        if sender.selectedSegmentIndex == 0 {
+            self.feedView.isHidden = false
+        } else if sender.selectedSegmentIndex == 1 {
+            
+        } else if sender.selectedSegmentIndex == 2 {
+            previewLayer?.isHidden = false
+        }
     }
     
     func sessionPrepare() {
@@ -103,7 +148,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         let ciImage = CIImage(cvImageBuffer: pixelBuffer!, options: attachments as! [String : Any]?)
         
         //leftMirrored for front camera
-        let ciImageWithOrientation = ciImage.applyingOrientation(Int32(UIImageOrientation.leftMirrored.rawValue))
+        let ciImageWithOrientation = ciImage.oriented(forExifOrientation: Int32(UIImageOrientation.leftMirrored.rawValue))
         
         detectFace(on: ciImageWithOrientation)
     }
@@ -111,7 +156,6 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
 }
 
 extension ViewController {
-    
     func detectFace(on image: CIImage) {
         try? faceDetectionRequest.perform([faceDetection], on: image)
         if let results = faceDetection.results as? [VNFaceObservation] {
@@ -136,42 +180,77 @@ extension ViewController {
                         
                         //different types of landmarks
                         let faceContour = observation.landmarks?.faceContour
-                        self.convertPointsForFace(faceContour, faceBoundingBox)
+                        self.convertPointsForFace(faceContour, faceBoundingBox, color: UIColor.blue)
                         
                         let leftEye = observation.landmarks?.leftEye
-                        self.convertPointsForFace(leftEye, faceBoundingBox)
+                        self.convertPointsForFace(leftEye, faceBoundingBox, color: UIColor.blue)
                         
                         let rightEye = observation.landmarks?.rightEye
-                        self.convertPointsForFace(rightEye, faceBoundingBox)
+                        self.convertPointsForFace(rightEye, faceBoundingBox, color: UIColor.blue)
                         
                         let nose = observation.landmarks?.nose
-                        self.convertPointsForFace(nose, faceBoundingBox)
-                        
-                        let lips = observation.landmarks?.innerLips
-                        self.convertPointsForFace(lips, faceBoundingBox)
+                        self.convertPointsForFace(nose, faceBoundingBox, color: UIColor.blue)
                         
                         let leftEyebrow = observation.landmarks?.leftEyebrow
-                        self.convertPointsForFace(leftEyebrow, faceBoundingBox)
+                        self.convertPointsForFace(leftEyebrow, faceBoundingBox, color: UIColor.black)
                         
                         let rightEyebrow = observation.landmarks?.rightEyebrow
-                        self.convertPointsForFace(rightEyebrow, faceBoundingBox)
+                        self.convertPointsForFace(rightEyebrow, faceBoundingBox, color: UIColor.black)
                         
                         let noseCrest = observation.landmarks?.noseCrest
-                        self.convertPointsForFace(noseCrest, faceBoundingBox)
+                        self.convertPointsForFace(noseCrest, faceBoundingBox, color: UIColor.blue)
+                        
+                        let lips = observation.landmarks?.innerLips
+                        self.convertPointsForFace(lips, faceBoundingBox, color: UIColor.red)
                         
                         let outerLips = observation.landmarks?.outerLips
-                        self.convertPointsForFace(outerLips, faceBoundingBox)
+                        self.convertPointsForFace(outerLips, faceBoundingBox, color: UIColor.red)
+                        
+                        // Convert to Emoji
+                        
+                        // calculate this depending on how far the user is away, 0.66 is the default distance
+                        // so distanceFactor is 1 if it's the default distance, and more than 1 if the user is closer
+                        // TODO: this doesn't work yet
+                        let distanceFactor = boundingBox.width / 0.66
+                        let drawingHeight = distanceFactor * self.view.frame.height / 2.0
+                        self.distanceView.frame = CGRect(x: 0,
+                                                         y: self.view.frame.height - drawingHeight,
+                                                         width: 20,
+                                                         height: drawingHeight)
+                        let yEyeDiff = leftEye!.normalizedPoints.first!.y - rightEye!.normalizedPoints.first!.y // This could be an angle to be more precise
+                        var mouthOpenDiff: CGFloat = 0.0;
+                        if let points = lips?.normalizedPoints { // TODO: move into shared method
+                            var minY: CGFloat = points.first!.y
+                            var maxY: CGFloat = points.first!.y
+                            points.forEach({ (point) in
+                                if point.y < minY { minY = point.y }
+                                if point.y > maxY { maxY = point.y }
+                            })
+                            mouthOpenDiff = maxY - minY
+                        }
+                        
+                        self.emojiLabel.transform = CGAffineTransform(rotationAngle: 0)
+                        if yEyeDiff * distanceFactor > 0.15 {
+                            self.emojiLabel.text = "🤠"
+                            self.emojiLabel.transform = CGAffineTransform(rotationAngle: -0.785398) // -45 degrees for poor people
+                        } else if yEyeDiff * distanceFactor < -0.15 {
+                            self.emojiLabel.text = "🤠"
+                            self.emojiLabel.transform = CGAffineTransform(rotationAngle: 0.785398) // 45 degrees for poor people
+                        } else if mouthOpenDiff * distanceFactor > 0.1 {
+                            self.emojiLabel.text = "😱"
+                        } else {
+                            self.emojiLabel.text = ""
+                        }
                     }
                 }
             }
         }
     }
+
     
-    func convertPointsForFace(_ landmark: VNFaceLandmarkRegion2D?, _ boundingBox: CGRect) {
-        if let points = landmark?.points, let count = landmark?.pointCount {
-            let convertedPoints = convert(points, with: count)
-            
-            let faceLandmarkPoints = convertedPoints.map { (point: (x: CGFloat, y: CGFloat)) -> (x: CGFloat, y: CGFloat) in
+    func convertPointsForFace(_ landmark: VNFaceLandmarkRegion2D?, _ boundingBox: CGRect, color: UIColor) {
+        if let points = landmark?.normalizedPoints {
+            let faceLandmarkPoints = points.map { (point: CGPoint) -> (x: CGFloat, y: CGFloat) in
                 let pointX = point.x * boundingBox.width + boundingBox.origin.x
                 let pointY = point.y * boundingBox.height + boundingBox.origin.y
                 
@@ -179,14 +258,14 @@ extension ViewController {
             }
             
             DispatchQueue.main.async {
-                self.draw(points: faceLandmarkPoints)
+                self.draw(points: faceLandmarkPoints, color: color)
             }
         }
     }
     
-    func draw(points: [(x: CGFloat, y: CGFloat)]) {
+    func draw(points: [(x: CGFloat, y: CGFloat)], color: UIColor) {
         let newLayer = CAShapeLayer()
-        newLayer.strokeColor = UIColor.red.cgColor
+        newLayer.strokeColor = color.cgColor
         newLayer.lineWidth = 2.0
         
         let path = UIBezierPath()
