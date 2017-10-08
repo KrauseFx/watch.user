@@ -19,7 +19,7 @@
 ## What does `watch.user` demonstrate?
 
 - Get access to the raw front and back camera of an iPhone/iPad any time your app is running (in the foreground)
-- Using the iOS 11 Vision SDK, a developer can very easily parse facial features in real-time like the eyes, mouth, and the face frame
+- Using the built-in iOS 11 Vision framework, a developer can very easily parse facial features in real-time like the eyes, mouth, and the face frame
 - Use the front and the back camera to know what your user is doing right now and where the user is located based on image data
 - Upload random frames of the video stream to your web service, and run a proper face recognition software, which enables you to
   - Find existing photos of you on the internet
