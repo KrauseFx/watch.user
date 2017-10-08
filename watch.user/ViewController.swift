@@ -10,14 +10,21 @@ import UIKit
 import AVFoundation
 import Vision
 
-final class ViewController: UIViewController, UIScrollViewDelegate {
+class YoloCell: UITableViewCell {
+    @IBOutlet weak var customImageView: UIImageView!
+}
+
+final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate {
     var session: AVCaptureSession?
     let shapeLayer = CAShapeLayer()
     
     let emojiLabel = UILabel()
+    let boringLabel = UILabel()
     let distanceView = UIView()
-    let feedView = UIScrollView()
-    
+    @IBOutlet weak var tableView: UITableView!
+    var lastImages = [CGImage]()
+    var counter = 0
+
     let faceDetection = VNDetectFaceRectanglesRequest()
     let faceLandmarks = VNDetectFaceLandmarksRequest()
     let faceLandmarksDetectionRequest = VNSequenceRequestHandler()
@@ -53,12 +60,17 @@ final class ViewController: UIViewController, UIScrollViewDelegate {
         
         view.layer.addSublayer(shapeLayer)
         
-        let segmented = UISegmentedControl.init(items: ["Feed", "Empty", "Raw"]);
-        segmented.frame = CGRect(x: 10, y: 30.0, width: self.view.frame.width - 20, height: 50); // like an animal
+        let segmented = UISegmentedControl.init(items: ["Text", "Feed", "Empty", "Raw"]);
+        segmented.frame = CGRect(x: 10, y: 25.0, width: self.view.frame.width - 20, height: 35); // like an animal
         segmented.selectedSegmentIndex = 0
         segmented.addTarget(self, action: #selector(didTapToggle(sender:)), for: UIControlEvents.valueChanged);
         view.addSubview(segmented);
         self.didTapToggle(sender: segmented)
+        
+        self.boringLabel.text = "This is just a text, really... any text, and you do something in this app, it could be anything, is it reading a news feed? Is it reading a book? Is it browsing the web using an in-app browser? Either way, you might want to tap on the buttons on the top of this app to get a better feel of what this app is capable of while you read this text :)"
+        self.boringLabel.numberOfLines = 13
+        self.boringLabel.frame = CGRect(x: 10, y: 90, width: self.view.bounds.width - 20, height: 180) // like an animal, this is super ugly, just like most code I wrote for this sample project
+        view.addSubview(self.boringLabel)
         
         emojiLabel.frame = CGRect(x: self.view.frame.width / 2.0 - 30.0, y: self.view.frame.height - 90.0, width: 100, height: 100);
         emojiLabel.text = "🙃"
@@ -69,22 +81,6 @@ final class ViewController: UIViewController, UIScrollViewDelegate {
         distanceView.backgroundColor = UIColor.blue
         distanceView.alpha = 0.3
         view.addSubview(distanceView)
-        
-        let image = UIImage.init(named: "SampleFeed")
-        let imageView = UIImageView.init(image: image)
-        feedView.addSubview(imageView)
-        feedView.backgroundColor = UIColor.clear
-        feedView.frame = CGRect(x: 0, y: 100, width: self.view.bounds.width, height: self.view.bounds.height)
-        feedView.contentSize = imageView.bounds.size
-        feedView.delegate = self
-        view.addSubview(feedView)
-    }
-    
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        feedView.alpha = 0.7
-    }
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        feedView.alpha = 1
     }
     
     override func viewDidLayoutSubviews() {
@@ -95,12 +91,20 @@ final class ViewController: UIViewController, UIScrollViewDelegate {
     
     @objc func didTapToggle(sender: UISegmentedControl) {
         previewLayer?.isHidden = true
-        self.feedView.isHidden = true
+        self.tableView.isHidden = true
+        view.layer.addSublayer(shapeLayer)
+        self.emojiLabel.isHidden = false
+        self.boringLabel.isHidden = true
+
         if sender.selectedSegmentIndex == 0 {
-            self.feedView.isHidden = false
+            shapeLayer.removeFromSuperlayer()
+            self.emojiLabel.isHidden = true
+            self.boringLabel.isHidden = false
         } else if sender.selectedSegmentIndex == 1 {
-            
+            self.tableView.isHidden = false
         } else if sender.selectedSegmentIndex == 2 {
+            
+        } else if sender.selectedSegmentIndex == 3 {
             previewLayer?.isHidden = false
         }
     }
@@ -157,6 +161,28 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
 
 extension ViewController {
     func detectFace(on image: CIImage) {
+        self.counter += 1
+        if self.counter == 10 {
+            self.counter = 0
+            let filter = CIFilter(name: "CISepiaTone")!
+            let context = CIContext()                                           
+
+            // Random image filters to make it look more creepy
+            // via https://developer.apple.com/library/content/documentation/GraphicsImaging/Conceptual/CoreImaging/ci_tasks/ci_tasks.html
+            filter.setValue(0.8, forKey: kCIInputIntensityKey)
+            filter.setValue(image, forKey: kCIInputImageKey)
+            let result = filter.outputImage!
+            let cgImage = context.createCGImage(result, from: result.extent)
+            
+            self.lastImages.insert(cgImage!, at: 0)
+            if self.lastImages.count > 10 {
+                self.lastImages.remove(at: self.lastImages.count - 1)
+            }
+            DispatchQueue.main.async {
+                self.tableView.reloadSections(IndexSet(integersIn: 0...0), with: UITableViewRowAnimation.none)
+            }
+        }
+
         try? faceDetectionRequest.perform([faceDetection], on: image)
         if let results = faceDetection.results as? [VNFaceObservation] {
             if !results.isEmpty {
@@ -287,5 +313,25 @@ extension ViewController {
         }
         
         return convertedPoints
+    }
+    
+    // All UITableView code
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1;
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.lastImages.count;
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 300;
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "YoloCell", for: indexPath) as! YoloCell
+        cell.customImageView.image = UIImage.init(cgImage: self.lastImages[indexPath.item])
+        
+        return cell;
     }
 }

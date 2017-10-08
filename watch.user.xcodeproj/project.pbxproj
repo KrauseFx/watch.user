@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		CA5DC3C81F7C019100645D2D /* SampleFeed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CA5DC3C71F7C014700645D2D /* SampleFeed@2x.png */; };
 		E56B7E711EFD261E006704F3 /* CGRect+Scaled.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56B7E701EFD261E006704F3 /* CGRect+Scaled.swift */; };
 		E5E2CD531EFA419000EBCCBF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E2CD521EFA419000EBCCBF /* AppDelegate.swift */; };
 		E5E2CD551EFA419000EBCCBF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E2CD541EFA419000EBCCBF /* ViewController.swift */; };
@@ -17,9 +16,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		CA5DC3C71F7C014700645D2D /* SampleFeed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SampleFeed@2x.png"; sourceTree = "<group>"; };
 		E56B7E701EFD261E006704F3 /* CGRect+Scaled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Scaled.swift"; sourceTree = "<group>"; };
-		E5E2CD4F1EFA419000EBCCBF /* Vision Face Detection.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Vision Face Detection.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E5E2CD4F1EFA419000EBCCBF /* watch.user.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = watch.user.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5E2CD521EFA419000EBCCBF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E5E2CD541EFA419000EBCCBF /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		E5E2CD571EFA419000EBCCBF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -50,7 +48,7 @@
 		E5E2CD501EFA419000EBCCBF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E5E2CD4F1EFA419000EBCCBF /* Vision Face Detection.app */,
+				E5E2CD4F1EFA419000EBCCBF /* watch.user.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -58,7 +56,6 @@
 		E5E2CD511EFA419000EBCCBF /* watch.user */ = {
 			isa = PBXGroup;
 			children = (
-				CA5DC3C71F7C014700645D2D /* SampleFeed@2x.png */,
 				E5E2CD521EFA419000EBCCBF /* AppDelegate.swift */,
 				E5E2CD541EFA419000EBCCBF /* ViewController.swift */,
 				E56B7E701EFD261E006704F3 /* CGRect+Scaled.swift */,
@@ -73,9 +70,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E5E2CD4E1EFA419000EBCCBF /* Vision Face Detection */ = {
+		E5E2CD4E1EFA419000EBCCBF /* watch.user */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E5E2CD611EFA419000EBCCBF /* Build configuration list for PBXNativeTarget "Vision Face Detection" */;
+			buildConfigurationList = E5E2CD611EFA419000EBCCBF /* Build configuration list for PBXNativeTarget "watch.user" */;
 			buildPhases = (
 				E5E2CD4B1EFA419000EBCCBF /* Sources */,
 				E5E2CD4C1EFA419000EBCCBF /* Frameworks */,
@@ -85,9 +82,9 @@
 			);
 			dependencies = (
 			);
-			name = "Vision Face Detection";
+			name = watch.user;
 			productName = "Vision Face Detection";
-			productReference = E5E2CD4F1EFA419000EBCCBF /* Vision Face Detection.app */;
+			productReference = E5E2CD4F1EFA419000EBCCBF /* watch.user.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -119,7 +116,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E5E2CD4E1EFA419000EBCCBF /* Vision Face Detection */,
+				E5E2CD4E1EFA419000EBCCBF /* watch.user */,
 			);
 		};
 /* End PBXProject section */
@@ -129,7 +126,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CA5DC3C81F7C019100645D2D /* SampleFeed@2x.png in Resources */,
 				E5E2CD5D1EFA419000EBCCBF /* LaunchScreen.storyboard in Resources */,
 				E5E2CD5A1EFA419000EBCCBF /* Assets.xcassets in Resources */,
 				E5E2CD581EFA419000EBCCBF /* Main.storyboard in Resources */,
@@ -281,9 +277,9 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N8X438SEU2;
-				INFOPLIST_FILE = "Vision Face Detection/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/watch.user/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.krausefx.parse-user";
+				PRODUCT_BUNDLE_IDENTIFIER = com.krausefx.watch.user;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
@@ -298,9 +294,9 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = N8X438SEU2;
-				INFOPLIST_FILE = "Vision Face Detection/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/watch.user/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.krausefx.parse-user";
+				PRODUCT_BUNDLE_IDENTIFIER = com.krausefx.watch.user;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
@@ -320,7 +316,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E5E2CD611EFA419000EBCCBF /* Build configuration list for PBXNativeTarget "Vision Face Detection" */ = {
+		E5E2CD611EFA419000EBCCBF /* Build configuration list for PBXNativeTarget "watch.user" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E5E2CD621EFA419000EBCCBF /* Debug */,
