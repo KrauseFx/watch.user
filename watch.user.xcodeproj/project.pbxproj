@@ -42,7 +42,7 @@
 		E5E2CD461EFA419000EBCCBF = {
 			isa = PBXGroup;
 			children = (
-				E5E2CD511EFA419000EBCCBF /* Vision Face Detection */,
+				E5E2CD511EFA419000EBCCBF /* watch.user */,
 				E5E2CD501EFA419000EBCCBF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -55,7 +55,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E5E2CD511EFA419000EBCCBF /* Vision Face Detection */ = {
+		E5E2CD511EFA419000EBCCBF /* watch.user */ = {
 			isa = PBXGroup;
 			children = (
 				CA5DC3C71F7C014700645D2D /* SampleFeed@2x.png */,
@@ -67,7 +67,7 @@
 				E5E2CD5B1EFA419000EBCCBF /* LaunchScreen.storyboard */,
 				E5E2CD5E1EFA419000EBCCBF /* Info.plist */,
 			);
-			path = "Vision Face Detection";
+			path = watch.user;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -106,7 +106,7 @@
 					};
 				};
 			};
-			buildConfigurationList = E5E2CD4A1EFA419000EBCCBF /* Build configuration list for PBXProject "Vision Face Detection" */;
+			buildConfigurationList = E5E2CD4A1EFA419000EBCCBF /* Build configuration list for PBXProject "watch.user" */;
 			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -311,7 +311,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E5E2CD4A1EFA419000EBCCBF /* Build configuration list for PBXProject "Vision Face Detection" */ = {
+		E5E2CD4A1EFA419000EBCCBF /* Build configuration list for PBXProject "watch.user" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E5E2CD5F1EFA419000EBCCBF /* Debug */,

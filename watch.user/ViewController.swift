@@ -247,7 +247,6 @@ extension ViewController {
         }
     }
 
-    
     func convertPointsForFace(_ landmark: VNFaceLandmarkRegion2D?, _ boundingBox: CGRect, color: UIColor) {
         if let points = landmark?.normalizedPoints {
             let faceLandmarkPoints = points.map { (point: CGPoint) -> (x: CGFloat, y: CGFloat) in
@@ -280,7 +279,6 @@ extension ViewController {
         
         shapeLayer.addSublayer(newLayer)
     }
-    
     
     func convert(_ points: UnsafePointer<vector_float2>, with count: Int) -> [(x: CGFloat, y: CGFloat)] {
         var convertedPoints = [(x: CGFloat, y: CGFloat)]()
