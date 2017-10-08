@@ -58,3 +58,5 @@ However, the point is, that if you use a messaging service, like Messenger, What
 This project is licensed under the terms of the MIT license. See the [LICENSE](LICENSE) file.
 
 Special thanks to [Pawel Chmiel](https://github.com/PChmiel), who built the foundation this project is based on with [VisionFaceDetection](https://github.com/DroidsOnRoids/VisionFaceDetection)
+
+Special thanks to [Soroush](https://twitter.com/khanlou) for the idea to build a demo app for this.
