@@ -51,7 +51,7 @@ Chances are, you say:
 
 > Oh, obviously, I never grant camera permission
 
-However, the point is, that if you use a messaging service, like Messenger, WhatsApp, Telegram or anything else, chances are high you already granted permission to access both your image library ([detect.location](https://github.com/KrauseFx/detect.location), and your camera.
+However, the point is, that if you use a messaging service, like Messenger, WhatsApp, Telegram or anything else, chances are high you already granted permission to access both your image library ([detect.location](https://github.com/KrauseFx/detect.location)), and your camera.
 
 ## License
 
