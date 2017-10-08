@@ -29,7 +29,7 @@ Most users often granted camera access to an app a while ago (e.g. a messaging a
 - Estimate the mood of the user based on what you show in your app (e.g. news feed of your app)
 - Detect if the user is on their phone alone, or watching together with a second person
 - With the recent innovation around faster internet connections, faster processors and more efficient video codecs, a user probably notice if you live stream their camera onto the internet (e.g. while they sit on the toilet)
-- Recording stunning video material from bathrooms around the world, using both the front and the back camera
+- Recording stunning video material from bathrooms around the world, using both the front and the back camera, while the user scrolls through your feed
 
 ## Proposal
 
