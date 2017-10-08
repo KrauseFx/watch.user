@@ -18,8 +18,10 @@
 
 ## What does `watch.user` demonstrate?
 
+Most users often granted camera access to an app a while ago (e.g. a messaging app or any news-feed-based app). Those apps can easily track the users face, take pictures, or live stream their front and back camera, without the user's consent.
+
 - Get access to the raw front and back camera of an iPhone/iPad any time your app is running (in the foreground)
-- Using the built-in iOS 11 Vision framework, a developer can very easily parse facial features in real-time like the eyes, mouth, and the face frame
+- Using the built-in iOS 11 Vision framework, a developer can very easily parse facial features in real-time like the eyes, mouth, and the face frame.
 - Use the front and the back camera to know what your user is doing right now and where the user is located based on image data
 - Upload random frames of the video stream to your web service, and run a proper face recognition software, which enables you to
   - Find existing photos of you on the internet
@@ -27,6 +29,7 @@
 - Estimate the mood of the user based on what you show in your app (e.g. news feed of your app)
 - Detect if the user is on their phone alone, or watching together with a second person
 - With the recent innovation around faster internet connections, faster processors and more efficient video codecs, a user probably notice if you live stream their camera onto the internet (e.g. while they sit on the toilet)
+- Recording stunning video material from bathrooms around the world, using both the front and the back camera
 
 ## Proposal
 
@@ -40,7 +43,15 @@ TODO: insert Radar here
 
 ## About the demo
 
-TODO
+The demo will show you an innocent, random text, this could be anything, a feed to scroll view, a book to read, an in-app browser. 
+
+The point of the demo is to show how an app can take pictures of you while you use it, once you give it camera permission.
+
+Chances are, you say:
+
+> Oh, obviously, I never grant camera permission
+
+However, the point is, that if you use a messaging service, like Messenger, WhatsApp, Telegram or anything else, chances are high you already granted permission to access both your image library ([detect.location](https://github.com/KrauseFx/detect.location), and your camera.
 
 ## License
 
