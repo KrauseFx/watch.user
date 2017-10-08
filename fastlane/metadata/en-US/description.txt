@@ -1,0 +1,7 @@
+WatchUser will show you a real-time visualization of where your face is. It supports 3 different modes
+
+1) Tkae pictures of you and show the most recent ones with a sepia effect in a list
+2) Show just the face position on a white background
+3) Show your face with the detected face drawings
+
+This app is useful to get a better sense of what your face looks like, and how it is perceived by your iPhone.
