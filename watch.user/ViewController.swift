@@ -95,11 +95,13 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
         view.layer.addSublayer(shapeLayer)
         self.emojiLabel.isHidden = false
         self.boringLabel.isHidden = true
+        self.distanceView.isHidden = false
 
         if sender.selectedSegmentIndex == 0 {
             shapeLayer.removeFromSuperlayer()
             self.emojiLabel.isHidden = true
             self.boringLabel.isHidden = false
+            self.distanceView.isHidden = true
         } else if sender.selectedSegmentIndex == 1 {
             self.tableView.isHidden = false
         } else if sender.selectedSegmentIndex == 2 {
