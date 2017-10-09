@@ -1,4 +1,5 @@
 <p align="center">
+  <a href="https://github.com/krausefx/whats-the-user-doing">whats-the-user-doing</a> &bull;
   <a href="https://github.com/krausefx/detect.location">detect.location</a> &bull;
   <b>watch.user</b>
 </p>
@@ -10,7 +11,7 @@
 [![Twitter: @KrauseFx](https://img.shields.io/badge/contact-@KrauseFx-blue.svg?style=flat)](https://twitter.com/KrauseFx)
 [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/KrauseFx/watch.user/blob/master/LICENSE)
 
-<a href="TODO"><img src="screenshots/WatchUser.png" align="right" width=80 /></a>
+<a href="TODO"><img src="watch.user/Assets.xcassets/AppIcon.appiconset/AppIcon-180x180.png" align="right" width=80 /></a>
 
 ## Disclaimer
 
