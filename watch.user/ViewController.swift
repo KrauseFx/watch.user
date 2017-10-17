@@ -16,7 +16,7 @@ class YoloCell: UITableViewCell {
     @IBOutlet weak var subtitleLabel: UILabel!
 }
 
-final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate {
+final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     var session: AVCaptureSession?
     let shapeLayer = CAShapeLayer()
     
@@ -24,6 +24,7 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
     let emojiLabel = UILabel()
     let distanceView = UIView()
     var enableCameraView = UIButton()
+    let picker = UIImagePickerController()
     @IBOutlet weak var tableView: UITableView!
     var lastImages = [CGImage]()
     var counter = 0
@@ -128,9 +129,36 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
     }
     
     @objc func didTapCameraButton() {
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            picker.delegate = self
+            picker.allowsEditing = false
+            picker.sourceType = UIImagePickerControllerSourceType.camera
+            picker.cameraCaptureMode = .photo
+            picker.modalPresentationStyle = .fullScreen
+            present(picker,animated: true, completion: nil)
+        } else {
+            NSLog("No camera") // TODO
+        }
+        
         self.sessionRunningAlready = true
         self.tableView.isScrollEnabled = true
         self.tableView.reloadData() // to make them less gray
+    }
+    
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil) // TODO
+    }
+
+    
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        var  chosenImage = UIImage()
+        chosenImage = info[UIImagePickerControllerOriginalImage] as! UIImage //2
+        self.feedImages.insert(chosenImage, at: 0)
+        self.feedTitles.insert("Your photo here 🎉", at: 0)
+        self.tableView.reloadData()
+        dismiss(animated: true, completion: nil)
     }
     
     override func viewDidLayoutSubviews() {
