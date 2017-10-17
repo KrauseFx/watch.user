@@ -12,19 +12,25 @@ import Vision
 
 class YoloCell: UITableViewCell {
     @IBOutlet weak var customImageView: UIImageView!
+    @IBOutlet weak var likesLabel: UILabel!
+    @IBOutlet weak var subtitleLabel: UILabel!
 }
 
 final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewDataSource, UITableViewDelegate {
     var session: AVCaptureSession?
     let shapeLayer = CAShapeLayer()
     
+    var sessionRunningAlready = false
     let emojiLabel = UILabel()
-    let boringLabel = UILabel()
     let distanceView = UIView()
+    var enableCameraView = UIButton()
     @IBOutlet weak var tableView: UITableView!
     var lastImages = [CGImage]()
     var counter = 0
-
+    
+    var feedImages = [UIImage]()
+    var feedTitles = [NSString]()
+    
     let faceDetection = VNDetectFaceRectanglesRequest()
     let faceLandmarks = VNDetectFaceLandmarksRequest()
     let faceLandmarksDetectionRequest = VNSequenceRequestHandler()
@@ -32,11 +38,11 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
     
     lazy var previewLayer: AVCaptureVideoPreviewLayer? = {
         guard let session = self.session else { return nil }
-
+        
         var previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer.videoGravity = .resizeAspectFill
         previewLayer.isHidden = true;
-
+        
         return previewLayer
     }()
     
@@ -48,7 +54,8 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
         super.viewDidLoad()
         
         sessionPrepare()
-        session?.startRunning()
+        session?.startRunning() // TODO: move those 2
+        
         guard let previewLayer = previewLayer else { return }
         view.layer.addSublayer(previewLayer)
         
@@ -60,17 +67,12 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
         
         view.layer.addSublayer(shapeLayer)
         
-        let segmented = UISegmentedControl.init(items: ["Text", "Feed", "Empty", "Raw"]);
+        let segmented = UISegmentedControl.init(items: ["Feed", "Empty", "Raw"]);
         segmented.frame = CGRect(x: 10, y: 25.0, width: self.view.frame.width - 20, height: 35); // like an animal
         segmented.selectedSegmentIndex = 0
         segmented.addTarget(self, action: #selector(didTapToggle(sender:)), for: UIControlEvents.valueChanged);
         view.addSubview(segmented);
         self.didTapToggle(sender: segmented)
-        
-        self.boringLabel.text = "This is just a text, really... any text, and you do something in this app, it could be anything, is it reading a news feed? Is it reading a book? Is it browsing the web using an in-app browser? Either way, you might want to tap on the buttons on the top of this app to get a better feel of what this app is capable of while you read this text :)"
-        self.boringLabel.numberOfLines = 13
-        self.boringLabel.frame = CGRect(x: 10, y: 90, width: self.view.bounds.width - 20, height: 180) // like an animal, this is super ugly, just like most code I wrote for this sample project
-        view.addSubview(self.boringLabel)
         
         emojiLabel.frame = CGRect(x: self.view.frame.width / 2.0 - 30.0, y: self.view.frame.height - 90.0, width: 100, height: 100);
         emojiLabel.text = "🙃"
@@ -81,6 +83,54 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
         distanceView.backgroundColor = UIColor.blue
         distanceView.alpha = 0.3
         view.addSubview(distanceView)
+        
+        self.feedImages = [
+            UIImage.init(named: "pexels-photo-305243.jpeg")!,
+            UIImage.init(named: "pexels-photo-305249.jpeg")!,
+            UIImage.init(named: "pexels-photo-305250.jpeg")!,
+            UIImage.init(named: "pexels-photo-305254.jpeg")!,
+            UIImage.init(named: "pexels-photo-305255.jpeg")!,
+            UIImage.init(named: "pexels-photo-305256.jpeg")!,
+            UIImage.init(named: "pexels-photo-305268.jpeg")!
+        ]
+        
+        self.feedTitles = [
+            "Why does everybody like Venice Beach?",
+            "The sunset in Santa Monica I guess",
+            "Skating like a pro",
+            "A \"city\"",
+            "LA is pretty overrated",
+            "This sign, always this sign",
+            "Built by Felix Krause",
+            "Who's that?",
+            "Did you really give a social media app access to your camera?",
+            "Are you aware the app can take pictures of you?",
+            "Whops, it could even live stream everything",
+            "Your front and your back camera",
+            "This could take spectacular video footage on rest rooms"
+        ]
+        
+        self.enableCameraView = UIButton.init(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 40.0))
+        enableCameraView.backgroundColor = UIColor(red:0.95, green:0.95, blue:0.95, alpha:1.00)
+        enableCameraView.addTarget(self, action: #selector(didTapCameraButton), for: .touchUpInside)
+        
+        let cameraButton = UILabel.init(frame: CGRect(x: 0, y: 0, width: enableCameraView.bounds.width, height: enableCameraView.bounds.height))
+        cameraButton.text = "📷 Photo"
+        cameraButton.textAlignment = NSTextAlignment.center
+        cameraButton.textColor = UIColor(red:0.54, green:0.55, blue:0.57, alpha:1.00)
+        enableCameraView.addSubview(cameraButton)
+        self.tableView.tableHeaderView = enableCameraView;
+        
+        segmented.isHidden = true;
+        self.tableView.isScrollEnabled = false
+        
+        // TODO: enable by default if camera access is here, just call `didTapCameraButton`
+    }
+    
+    @objc func didTapCameraButton() {
+        self.sessionRunningAlready = true
+        self.tableView.isScrollEnabled = true
+        self.tableView.reloadData() // to make them less gray
     }
     
     override func viewDidLayoutSubviews() {
@@ -94,19 +144,16 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
         self.tableView.isHidden = true
         view.layer.addSublayer(shapeLayer)
         self.emojiLabel.isHidden = false
-        self.boringLabel.isHidden = true
         self.distanceView.isHidden = false
-
+        
         if sender.selectedSegmentIndex == 0 {
-            shapeLayer.removeFromSuperlayer()
+            self.tableView.isHidden = false
             self.emojiLabel.isHidden = true
-            self.boringLabel.isHidden = false
+            shapeLayer.removeFromSuperlayer()
             self.distanceView.isHidden = true
         } else if sender.selectedSegmentIndex == 1 {
-            self.tableView.isHidden = false
-        } else if sender.selectedSegmentIndex == 2 {
             
-        } else if sender.selectedSegmentIndex == 3 {
+        } else if sender.selectedSegmentIndex == 2 {
             previewLayer?.isHidden = false
         }
     }
@@ -145,7 +192,7 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
 }
 
 extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
-        
+    
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
         let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
@@ -158,17 +205,20 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
         
         detectFace(on: ciImageWithOrientation)
     }
-        
+    
 }
 
 extension ViewController {
     func detectFace(on image: CIImage) {
         self.counter += 1
-        if self.counter == 10 {
+        if self.counter == 30 {
+            if self.lastImages.count > 10 {
+                return;
+            }
             self.counter = 0
             let filter = CIFilter(name: "CISepiaTone")!
-            let context = CIContext()                                           
-
+            let context = CIContext()
+            
             // Random image filters to make it look more creepy
             // via https://developer.apple.com/library/content/documentation/GraphicsImaging/Conceptual/CoreImaging/ci_tasks/ci_tasks.html
             filter.setValue(0.8, forKey: kCIInputIntensityKey)
@@ -176,15 +226,16 @@ extension ViewController {
             let result = filter.outputImage!
             let cgImage = context.createCGImage(result, from: result.extent)
             
-            self.lastImages.insert(cgImage!, at: 0)
-            if self.lastImages.count > 10 {
-                self.lastImages.remove(at: self.lastImages.count - 1)
-            }
+            //            self.lastImages.insert(cgImage!, at: 0)
+            self.lastImages.append(cgImage!)
+            //            if self.lastImages.count > 10 {
+            //                self.lastImages.remove(at: self.lastImages.count - 1)
+            //            }
             DispatchQueue.main.async {
-                self.tableView.reloadSections(IndexSet(integersIn: 0...0), with: UITableViewRowAnimation.none)
+                self.tableView.reloadData()
             }
         }
-
+        
         try? faceDetectionRequest.perform([faceDetection], on: image)
         if let results = faceDetection.results as? [VNFaceObservation] {
             if !results.isEmpty {
@@ -274,7 +325,7 @@ extension ViewController {
             }
         }
     }
-
+    
     func convertPointsForFace(_ landmark: VNFaceLandmarkRegion2D?, _ boundingBox: CGRect, color: UIColor) {
         if let points = landmark?.normalizedPoints {
             let faceLandmarkPoints = points.map { (point: CGPoint) -> (x: CGFloat, y: CGFloat) in
@@ -323,17 +374,64 @@ extension ViewController {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.lastImages.count;
+        return self.feedImages.count + self.lastImages.count;
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 300;
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if !self.sessionRunningAlready {
+            // best code
+            self.enableCameraView.backgroundColor = .orange
+            let deadlineTime = DispatchTime.now() + 0.2
+            DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+                self.enableCameraView.backgroundColor = UIColor(red:0.95, green:0.95, blue:0.95, alpha:1.00)
+                let deadlineTime = DispatchTime.now() + 0.2
+                DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+                    self.enableCameraView.backgroundColor = .orange
+                    let deadlineTime = DispatchTime.now() + 0.2
+                    DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+                        self.enableCameraView.backgroundColor = UIColor(red:0.95, green:0.95, blue:0.95, alpha:1.00)
+                    }
+                }
+            }
+        }
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "YoloCell", for: indexPath) as! YoloCell
-        cell.customImageView.image = UIImage.init(cgImage: self.lastImages[indexPath.item])
+        
+        if indexPath.row >= self.feedImages.count {
+            cell.customImageView.image = UIImage.init(cgImage: self.lastImages[indexPath.item - self.feedImages.count]);
+            cell.customImageView.contentMode = .scaleAspectFit
+        } else {
+            cell.customImageView.image = self.feedImages[indexPath.item]
+            cell.customImageView.contentMode = .scaleAspectFill
+        }
+        
+        if indexPath.row >= feedTitles.count {
+            cell.subtitleLabel.text = "Selfie time"
+        } else {
+            cell.subtitleLabel.text = self.feedTitles[indexPath.item] as String;
+        }
+        
+        cell.likesLabel.text = NSString.init(format: "%i likes", indexPath.item * 3 / 2) as String;
+        cell.likesLabel.sizeToFit()
+        cell.subtitleLabel.sizeToFit()
+        
+        cell.customImageView.alpha = 1
+        cell.subtitleLabel.alpha = 1
+        cell.likesLabel.alpha = 1
+        
+        if !self.sessionRunningAlready {
+            cell.customImageView.alpha = 0.6
+            cell.subtitleLabel.alpha = 0.5
+            cell.likesLabel.alpha = 0.5
+        }
         
         return cell;
     }
 }
+
