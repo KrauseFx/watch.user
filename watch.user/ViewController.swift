@@ -139,10 +139,6 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
         } else {
             NSLog("No camera") // TODO
         }
-        
-        self.sessionRunningAlready = true
-        self.tableView.isScrollEnabled = true
-        self.tableView.reloadData() // to make them less gray
     }
     
     
@@ -159,6 +155,9 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
         self.feedTitles.insert("Your photo here 🎉", at: 0)
         self.tableView.reloadData()
         dismiss(animated: true, completion: nil)
+        self.sessionRunningAlready = true
+        self.tableView.isScrollEnabled = true
+        self.tableView.reloadData() // to make them less gray
     }
     
     override func viewDidLayoutSubviews() {
