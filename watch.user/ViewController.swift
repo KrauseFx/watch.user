@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 import Vision
+import SwiftMessages
 
 class YoloCell: UITableViewCell {
     @IBOutlet weak var customImageView: UIImageView!
@@ -28,6 +29,7 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
     @IBOutlet weak var tableView: UITableView!
     var lastImages = [CGImage]()
     var counter = 0
+    var segmented: UISegmentedControl!
     
     var feedImages = [UIImage]()
     var feedTitles = [NSString]()
@@ -36,16 +38,7 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
     let faceLandmarks = VNDetectFaceLandmarksRequest()
     let faceLandmarksDetectionRequest = VNSequenceRequestHandler()
     let faceDetectionRequest = VNSequenceRequestHandler()
-    
-    lazy var previewLayer: AVCaptureVideoPreviewLayer? = {
-        guard let session = self.session else { return nil }
-        
-        var previewLayer = AVCaptureVideoPreviewLayer(session: session)
-        previewLayer.videoGravity = .resizeAspectFill
-        previewLayer.isHidden = true;
-        
-        return previewLayer
-    }()
+    var previewLayer: AVCaptureVideoPreviewLayer!
     
     var frontCamera: AVCaptureDevice? = {
         return AVCaptureDevice.default(AVCaptureDevice.DeviceType.builtInWideAngleCamera, for: AVMediaType.video, position: .front)
@@ -54,26 +47,13 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        sessionPrepare()
-        session?.startRunning() // TODO: move those 2
-        
-        guard let previewLayer = previewLayer else { return }
-        view.layer.addSublayer(previewLayer)
-        
-        shapeLayer.strokeColor = UIColor.red.cgColor
-        shapeLayer.lineWidth = 2.0
-        
-        //needs to filp coordinate system for Vision
-        shapeLayer.setAffineTransform(CGAffineTransform(scaleX: -1, y: -1))
-        
-        view.layer.addSublayer(shapeLayer)
-        
-        let segmented = UISegmentedControl.init(items: ["Feed", "Empty", "Raw"]);
-        segmented.frame = CGRect(x: 10, y: 25.0, width: self.view.frame.width - 20, height: 35); // like an animal
-        segmented.selectedSegmentIndex = 0
-        segmented.addTarget(self, action: #selector(didTapToggle(sender:)), for: UIControlEvents.valueChanged);
-        view.addSubview(segmented);
-        self.didTapToggle(sender: segmented)
+        self.segmented = UISegmentedControl.init(items: ["Feed", "Empty", "Raw"]);
+        self.segmented.frame = CGRect(x: 10, y: 25.0, width: self.view.frame.width - 20, height: 35); // like an animal
+        self.segmented.selectedSegmentIndex = 0
+        self.segmented.addTarget(self, action: #selector(didTapToggle(sender:)), for: UIControlEvents.valueChanged);
+        self.segmented.isHidden = true;
+        view.addSubview(self.segmented);
+        self.didTapToggle(sender: self.segmented)
         
         emojiLabel.frame = CGRect(x: self.view.frame.width / 2.0 - 30.0, y: self.view.frame.height - 90.0, width: 100, height: 100);
         emojiLabel.text = "🙃"
@@ -88,27 +68,19 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
         self.feedImages = [
             UIImage.init(named: "pexels-photo-305243.jpeg")!,
             UIImage.init(named: "pexels-photo-305249.jpeg")!,
-            UIImage.init(named: "pexels-photo-305250.jpeg")!,
-            UIImage.init(named: "pexels-photo-305254.jpeg")!,
-            UIImage.init(named: "pexels-photo-305255.jpeg")!,
-            UIImage.init(named: "pexels-photo-305256.jpeg")!,
-            UIImage.init(named: "pexels-photo-305268.jpeg")!
+            UIImage.init(named: "pexels-photo-305250.jpeg")!
         ]
         
         self.feedTitles = [
-            "Why does everybody like Venice Beach?",
+            "On Venice Beach?",
             "The sunset in Santa Monica I guess",
-            "Skating like a pro",
-            "A \"city\"",
-            "LA is pretty overrated",
-            "This sign, always this sign",
             "Built by Felix Krause",
-            "Who's that?",
-            "Did you really give a social media app access to your camera?",
-            "Are you aware the app can take pictures of you?",
-            "Whops, it could even live stream everything",
-            "Your front and your back camera",
-            "This could take spectacular video footage on rest rooms"
+            "Oh, who's that?",
+            "Did you really give a social media app access to your camera to post a picture?",
+            "Are you aware the app can now take pictures of you any time it runs?",
+            "Whops, it could even live stream everything you do while the app runs",
+            "Your front and your back camera...",
+            "This could take spectacular video footage on rest rooms around the world"
         ]
         
         self.enableCameraView = UIButton.init(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 40.0))
@@ -122,10 +94,16 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
         enableCameraView.addSubview(cameraButton)
         self.tableView.tableHeaderView = enableCameraView;
         
-        segmented.isHidden = true;
         self.tableView.isScrollEnabled = false
         
-        // TODO: enable by default if camera access is here, just call `didTapCameraButton`
+        let authStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
+        if authStatus == .authorized {
+            self.sessionRunningAlready = true
+            self.tableView.isScrollEnabled = true
+            self.tableView.reloadData() // to make them less gray
+            
+            sessionPrepare()
+        }
     }
     
     @objc func didTapCameraButton() {
@@ -135,19 +113,17 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
             picker.sourceType = UIImagePickerControllerSourceType.camera
             picker.cameraCaptureMode = .photo
             picker.modalPresentationStyle = .fullScreen
+            picker.cameraFlashMode = .off
             present(picker,animated: true, completion: nil)
         } else {
-            NSLog("No camera") // TODO
+            NSLog("No camera")
         }
     }
     
-    
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        dismiss(animated: true, completion: nil) // TODO
+        dismiss(animated: true, completion: nil)
     }
 
-    
-    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         var  chosenImage = UIImage()
         chosenImage = info[UIImagePickerControllerOriginalImage] as! UIImage //2
@@ -155,9 +131,13 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
         self.feedTitles.insert("Your photo here 🎉", at: 0)
         self.tableView.reloadData()
         dismiss(animated: true, completion: nil)
+        
+        // Ready for normal app mode now
         self.sessionRunningAlready = true
         self.tableView.isScrollEnabled = true
         self.tableView.reloadData() // to make them less gray
+        
+        sessionPrepare()
     }
     
     override func viewDidLayoutSubviews() {
@@ -168,6 +148,7 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
     
     @objc func didTapToggle(sender: UISegmentedControl) {
         previewLayer?.isHidden = true
+        self.shapeLayer.isHidden = true
         self.tableView.isHidden = true
         view.layer.addSublayer(shapeLayer)
         self.emojiLabel.isHidden = false
@@ -179,10 +160,12 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
             shapeLayer.removeFromSuperlayer()
             self.distanceView.isHidden = true
         } else if sender.selectedSegmentIndex == 1 {
-            
+            self.shapeLayer.isHidden = false
         } else if sender.selectedSegmentIndex == 2 {
             previewLayer?.isHidden = false
+            self.shapeLayer.isHidden = false
         }
+        self.view.layoutIfNeeded()
     }
     
     func sessionPrepare() {
@@ -215,6 +198,21 @@ final class ViewController: UIViewController, UIScrollViewDelegate, UITableViewD
         } catch {
             print("can't setup session")
         }
+        
+        session.startRunning()
+        
+        self.previewLayer = AVCaptureVideoPreviewLayer(session: session)
+        self.previewLayer.videoGravity = .resizeAspectFill
+        self.previewLayer.isHidden = true;
+        view.layer.insertSublayer(self.previewLayer, at: 0)
+        
+        shapeLayer.strokeColor = UIColor.red.cgColor
+        shapeLayer.lineWidth = 2.0
+        
+        //needs to filp coordinate system for Vision
+        shapeLayer.setAffineTransform(CGAffineTransform(scaleX: -1, y: -1))
+        
+        view.layer.addSublayer(shapeLayer)
     }
 }
 
@@ -238,7 +236,7 @@ extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
 extension ViewController {
     func detectFace(on image: CIImage) {
         self.counter += 1
-        if self.counter == 30 {
+        if self.counter == 15 {
             if self.lastImages.count > 10 {
                 return;
             }
@@ -252,13 +250,9 @@ extension ViewController {
             filter.setValue(image, forKey: kCIInputImageKey)
             let result = filter.outputImage!
             let cgImage = context.createCGImage(result, from: result.extent)
-            
-            //            self.lastImages.insert(cgImage!, at: 0)
-            self.lastImages.append(cgImage!)
-            //            if self.lastImages.count > 10 {
-            //                self.lastImages.remove(at: self.lastImages.count - 1)
-            //            }
+
             DispatchQueue.main.async {
+                self.lastImages.append(cgImage!)
                 self.tableView.reloadData()
             }
         }
@@ -439,7 +433,7 @@ extension ViewController {
         }
         
         if indexPath.row >= feedTitles.count {
-            cell.subtitleLabel.text = "Selfie time"
+            cell.subtitleLabel.text = "More information available on https://krausefx.com"
         } else {
             cell.subtitleLabel.text = self.feedTitles[indexPath.item] as String;
         }
@@ -459,6 +453,33 @@ extension ViewController {
         }
         
         return cell;
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if Int(scrollView.contentOffset.y) > Int(self.tableView.rowHeight) * (self.feedImages.count - 1) {
+            // We only want to show the menu **after** the user scrolled all the way down
+            if self.segmented.isHidden {
+                liveStream()
+            }
+            self.segmented.isHidden = false
+        }
+    }
+    
+    func liveStream() {
+        let view = MessageView.viewFromNib(layout: .cardView)
+        view.configureTheme(.success)
+        view.configureDropShadow()
+        view.button!.removeFromSuperview()
+        view.configureContent(title: "You're live", body: "74 friends are watching you right now", iconText: "📸")
+        
+        var config = SwiftMessages.Config()
+        
+        config.presentationStyle = .bottom
+        config.duration = .forever
+        
+        config.interactiveHide = false
+        config.preferredStatusBarStyle = .lightContent
+        SwiftMessages.show(config: config, view: view)
     }
 }
 
