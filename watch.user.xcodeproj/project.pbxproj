@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CA6ECDBB1F954E9500000BF3 /* pexels-photo-305243.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = CA6ECDB41F954DCA00000BF3 /* pexels-photo-305243.jpeg */; };
+		CA6ECDBC1F954E9500000BF3 /* pexels-photo-305249.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = CA6ECDB51F954DCA00000BF3 /* pexels-photo-305249.jpeg */; };
+		CA6ECDBD1F954E9500000BF3 /* pexels-photo-305250.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = CA6ECDB61F954DCA00000BF3 /* pexels-photo-305250.jpeg */; };
+		CA6ECDBE1F954E9500000BF3 /* pexels-photo-305254.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = CA6ECDB71F954DCA00000BF3 /* pexels-photo-305254.jpeg */; };
+		CA6ECDBF1F954E9500000BF3 /* pexels-photo-305255.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = CA6ECDB81F954DCA00000BF3 /* pexels-photo-305255.jpeg */; };
+		CA6ECDC01F954E9500000BF3 /* pexels-photo-305256.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = CA6ECDB91F954DCA00000BF3 /* pexels-photo-305256.jpeg */; };
+		CA6ECDC11F954E9500000BF3 /* pexels-photo-305268.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = CA6ECDBA1F954DCA00000BF3 /* pexels-photo-305268.jpeg */; };
+		E0D683783213ED8BB034955D /* Pods_watch_user.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9440C325C901077520303EA7 /* Pods_watch_user.framework */; };
 		E56B7E711EFD261E006704F3 /* CGRect+Scaled.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56B7E701EFD261E006704F3 /* CGRect+Scaled.swift */; };
 		E5E2CD531EFA419000EBCCBF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E2CD521EFA419000EBCCBF /* AppDelegate.swift */; };
 		E5E2CD551EFA419000EBCCBF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E2CD541EFA419000EBCCBF /* ViewController.swift */; };
@@ -16,6 +24,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9440C325C901077520303EA7 /* Pods_watch_user.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_watch_user.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA6ECDB41F954DCA00000BF3 /* pexels-photo-305243.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "pexels-photo-305243.jpeg"; sourceTree = "<group>"; };
+		CA6ECDB51F954DCA00000BF3 /* pexels-photo-305249.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "pexels-photo-305249.jpeg"; sourceTree = "<group>"; };
+		CA6ECDB61F954DCA00000BF3 /* pexels-photo-305250.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "pexels-photo-305250.jpeg"; sourceTree = "<group>"; };
+		CA6ECDB71F954DCA00000BF3 /* pexels-photo-305254.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "pexels-photo-305254.jpeg"; sourceTree = "<group>"; };
+		CA6ECDB81F954DCA00000BF3 /* pexels-photo-305255.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "pexels-photo-305255.jpeg"; sourceTree = "<group>"; };
+		CA6ECDB91F954DCA00000BF3 /* pexels-photo-305256.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "pexels-photo-305256.jpeg"; sourceTree = "<group>"; };
+		CA6ECDBA1F954DCA00000BF3 /* pexels-photo-305268.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "pexels-photo-305268.jpeg"; sourceTree = "<group>"; };
 		E56B7E701EFD261E006704F3 /* CGRect+Scaled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Scaled.swift"; sourceTree = "<group>"; };
 		E5E2CD4F1EFA419000EBCCBF /* watch.user.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = watch.user.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5E2CD521EFA419000EBCCBF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -24,6 +40,8 @@
 		E5E2CD591EFA419000EBCCBF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E5E2CD5C1EFA419000EBCCBF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E5E2CD5E1EFA419000EBCCBF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F5686F5AD3F4AAAD4068BEC3 /* Pods-watch.user.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-watch.user.release.xcconfig"; path = "Pods/Target Support Files/Pods-watch.user/Pods-watch.user.release.xcconfig"; sourceTree = "<group>"; };
+		FC61A29E4B1501AA652752DD /* Pods-watch.user.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-watch.user.debug.xcconfig"; path = "Pods/Target Support Files/Pods-watch.user/Pods-watch.user.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,17 +49,51 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0D683783213ED8BB034955D /* Pods_watch_user.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		766AF35B5A477C876913C129 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				FC61A29E4B1501AA652752DD /* Pods-watch.user.debug.xcconfig */,
+				F5686F5AD3F4AAAD4068BEC3 /* Pods-watch.user.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		CA6ECDB31F954DCA00000BF3 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				CA6ECDB41F954DCA00000BF3 /* pexels-photo-305243.jpeg */,
+				CA6ECDB51F954DCA00000BF3 /* pexels-photo-305249.jpeg */,
+				CA6ECDB61F954DCA00000BF3 /* pexels-photo-305250.jpeg */,
+				CA6ECDB71F954DCA00000BF3 /* pexels-photo-305254.jpeg */,
+				CA6ECDB81F954DCA00000BF3 /* pexels-photo-305255.jpeg */,
+				CA6ECDB91F954DCA00000BF3 /* pexels-photo-305256.jpeg */,
+				CA6ECDBA1F954DCA00000BF3 /* pexels-photo-305268.jpeg */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
+		CA770F281F979A5800A921B2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9440C325C901077520303EA7 /* Pods_watch_user.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		E5E2CD461EFA419000EBCCBF = {
 			isa = PBXGroup;
 			children = (
 				E5E2CD511EFA419000EBCCBF /* watch.user */,
 				E5E2CD501EFA419000EBCCBF /* Products */,
+				CA770F281F979A5800A921B2 /* Frameworks */,
+				766AF35B5A477C876913C129 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -56,6 +108,7 @@
 		E5E2CD511EFA419000EBCCBF /* watch.user */ = {
 			isa = PBXGroup;
 			children = (
+				CA6ECDB31F954DCA00000BF3 /* images */,
 				E5E2CD521EFA419000EBCCBF /* AppDelegate.swift */,
 				E5E2CD541EFA419000EBCCBF /* ViewController.swift */,
 				E56B7E701EFD261E006704F3 /* CGRect+Scaled.swift */,
@@ -74,9 +127,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E5E2CD611EFA419000EBCCBF /* Build configuration list for PBXNativeTarget "watch.user" */;
 			buildPhases = (
+				7CD5C7E97F6682B83B8B98DC /* [CP] Check Pods Manifest.lock */,
 				E5E2CD4B1EFA419000EBCCBF /* Sources */,
 				E5E2CD4C1EFA419000EBCCBF /* Frameworks */,
 				E5E2CD4D1EFA419000EBCCBF /* Resources */,
+				4145F85759A14D5E21186FA7 /* [CP] Embed Pods Frameworks */,
+				CEF891D8A75977132038AD92 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -100,6 +156,14 @@
 					E5E2CD4E1EFA419000EBCCBF = {
 						CreatedOnToolsVersion = 9.0;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 0;
+							};
+							com.apple.iCloud = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -126,13 +190,68 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CA6ECDC01F954E9500000BF3 /* pexels-photo-305256.jpeg in Resources */,
+				CA6ECDBD1F954E9500000BF3 /* pexels-photo-305250.jpeg in Resources */,
 				E5E2CD5D1EFA419000EBCCBF /* LaunchScreen.storyboard in Resources */,
 				E5E2CD5A1EFA419000EBCCBF /* Assets.xcassets in Resources */,
+				CA6ECDBB1F954E9500000BF3 /* pexels-photo-305243.jpeg in Resources */,
+				CA6ECDC11F954E9500000BF3 /* pexels-photo-305268.jpeg in Resources */,
+				CA6ECDBC1F954E9500000BF3 /* pexels-photo-305249.jpeg in Resources */,
+				CA6ECDBF1F954E9500000BF3 /* pexels-photo-305255.jpeg in Resources */,
+				CA6ECDBE1F954E9500000BF3 /* pexels-photo-305254.jpeg in Resources */,
 				E5E2CD581EFA419000EBCCBF /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4145F85759A14D5E21186FA7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-watch.user/Pods-watch.user-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7CD5C7E97F6682B83B8B98DC /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		CEF891D8A75977132038AD92 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-watch.user/Pods-watch.user-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E5E2CD4B1EFA419000EBCCBF /* Sources */ = {
@@ -272,6 +391,7 @@
 		};
 		E5E2CD621EFA419000EBCCBF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FC61A29E4B1501AA652752DD /* Pods-watch.user.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -289,6 +409,7 @@
 		};
 		E5E2CD631EFA419000EBCCBF /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F5686F5AD3F4AAAD4068BEC3 /* Pods-watch.user.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";

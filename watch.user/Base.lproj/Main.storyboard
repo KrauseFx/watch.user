@@ -20,7 +20,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="400" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7NB-Tf-tyi">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="400" estimatedRowHeight="400" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7NB-Tf-tyi">
                                 <rect key="frame" x="0.0" y="65" width="375" height="602"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -31,19 +31,44 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="399.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MxC-FD-2O6">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="399.5"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MxC-FD-2O6">
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="314"/>
                                                 </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="17 likes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aDB-vo-7nY">
+                                                    <rect key="frame" x="8" y="322" width="60" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="YLT-yf-aqe"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What a beautiful day in New York, just lovely, 2 lines are valid also" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OqC-td-QJr">
+                                                    <rect key="frame" x="8" y="351" width="359" height="41"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="41" id="ax0-vB-VzP"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="MxC-FD-2O6" secondAttribute="bottom" id="0m6-RA-Mzk"/>
+                                                <constraint firstAttribute="bottom" secondItem="MxC-FD-2O6" secondAttribute="bottom" constant="85.5" id="0m6-RA-Mzk"/>
+                                                <constraint firstAttribute="trailing" secondItem="OqC-td-QJr" secondAttribute="trailing" constant="8" id="3Gg-3h-soL"/>
                                                 <constraint firstItem="MxC-FD-2O6" firstAttribute="leading" secondItem="u75-MI-m59" secondAttribute="leading" id="59h-XW-tv9"/>
+                                                <constraint firstItem="OqC-td-QJr" firstAttribute="leading" secondItem="u75-MI-m59" secondAttribute="leading" constant="8" id="HVE-va-ajh"/>
+                                                <constraint firstItem="aDB-vo-7nY" firstAttribute="leading" secondItem="u75-MI-m59" secondAttribute="leading" constant="8" id="Oua-EF-fcK"/>
+                                                <constraint firstItem="OqC-td-QJr" firstAttribute="top" secondItem="aDB-vo-7nY" secondAttribute="bottom" constant="8" id="X7u-ds-DtF"/>
                                                 <constraint firstAttribute="trailing" secondItem="MxC-FD-2O6" secondAttribute="trailing" id="eUk-yu-h7g"/>
+                                                <constraint firstItem="aDB-vo-7nY" firstAttribute="top" secondItem="MxC-FD-2O6" secondAttribute="bottom" constant="8" id="xkO-uG-Bm4"/>
                                                 <constraint firstItem="MxC-FD-2O6" firstAttribute="top" secondItem="u75-MI-m59" secondAttribute="top" id="ym6-sW-mXY"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="customImageView" destination="MxC-FD-2O6" id="oPc-UG-T6k"/>
+                                            <outlet property="likesLabel" destination="aDB-vo-7nY" id="BPI-M8-QRe"/>
+                                            <outlet property="subtitleLabel" destination="OqC-td-QJr" id="n2G-yB-olt"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
